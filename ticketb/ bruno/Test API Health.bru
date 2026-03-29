@@ -1,0 +1,19 @@
+meta {
+  name: Test API Health
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/test-connection
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:8080
+}
