@@ -1,9 +1,12 @@
 package com.ticketb.ticketb.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.ticketb.ticketb.entities.User;
 import com.ticketb.ticketb.repositorys.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -14,26 +17,31 @@ public class UserService {
     public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
-
-    public User AddUser(User user) {
-        return userRepo.save(user);
+    public boolean CheckIfUserExists(String username){
+        return userRepo.existsById(username);
     }
-
-    public User GetUserById(Long id) {
-        return userRepo.findById(id).orElse(null);
-    }
-
-    public void DeleteUser(Long id) {
-        userRepo.deleteById(id);
-    }
-
-    public User UpdateUser(Long id, User user) {
-        User existingUser = userRepo.findById(id).orElse(null);
-        if (existingUser != null) {
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            return userRepo.save(existingUser);
+    public ResponseEntity<?> AddUser(User user) {
+        if(CheckIfUserExists(user.getUsername())) {
+            return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
         }
-        return null;
+        User curusr = userRepo.save(user);
+        return new ResponseEntity<>(curusr, HttpStatus.CREATED);
+    }
+    public ResponseEntity<?> Signup(User user) {
+        if(CheckIfUserExists(user.getUsername())) {
+            return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
+        }
+        User curusr = userRepo.save(user);
+        return new ResponseEntity<>(curusr, HttpStatus.CREATED);
+    }
+    public ResponseEntity<?> Login(User user) {
+        if(!CheckIfUserExists(user.getUsername())) {
+            return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        }
+        User curusr = userRepo.findById(user.getUsername()).get();
+        if(!curusr.getPassword().equals(user.getPassword())) {
+            return new ResponseEntity<>("Invalid password", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(curusr, HttpStatus.OK);
     }
 }

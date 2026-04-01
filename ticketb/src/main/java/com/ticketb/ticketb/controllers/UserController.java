@@ -20,14 +20,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    public ResponseEntity<User> add_user(@RequestBody User user) {
+    public ResponseEntity<?> add_user(@RequestBody User user) {
         try {
-            return new ResponseEntity<User>(
+            return new ResponseEntity<>(
                 userService.AddUser(user),
                 HttpStatus.OK
             );
         } catch (Exception e) {
-            return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
