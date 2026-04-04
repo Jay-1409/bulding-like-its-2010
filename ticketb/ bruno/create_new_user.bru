@@ -1,0 +1,28 @@
+meta {
+  name: create_new_user
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/signup
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username":"jay1409",
+    "password":"123123123"
+  }
+}
+
+body:multipart-form {
+  username: jay1409
+  password: 123123123
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
