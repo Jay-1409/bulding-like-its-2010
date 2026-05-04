@@ -1,3 +1,5 @@
+package com.ticketb.ticketb.entities;
+
 import com.ticketb.ticketb.entities.Bus;
 import jakarta.persistence.*;
 

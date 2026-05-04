@@ -1,35 +1,33 @@
 package com.ticketb.ticketb.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import com.ticketb.ticketb.entities.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "booking")
 public class Booking {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(
-        name = "booking_seq",
-        sequenceName = "booking_seq",
-        allocationSize = 1
-    )
     private Long b_id;
 
     @ManyToOne
-    @JoinColumn(
-        name = "u_id",
-        referencedColumnName = "username",
-        nullable = false
-    )
+    @JoinColumn(name = "u_id", referencedColumnName = "username", nullable = false)
     private User u_id;
 
+    @ManyToOne
+    @JoinColumn(name = "bus_id", referencedColumnName = "bus_id", nullable = false)
+    private Bus bus;
+    @ManyToMany
+    @JoinTable(
+            name = "booking_seats",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "seat_id")
+    )
+    private List<Seat> seats;
     boolean status;
 
     public Long getB_id() {
